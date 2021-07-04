@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package hosting_de.crisp;
+
+option go_package = "api/crisp";
+
+service Crisp {
+  rpc Ping(PingRequest) returns (PingResponse);
+  rpc Push(PushRequest) returns (PushResponse);
+  rpc Register(RegisterRequest) returns (RegisterResponse);
+  rpc Token(TokenRequest) returns (TokenResponse);
+}
+
+message Error {
+  uint32 status = 1;
+  string message = 2;
+}
+
+message Token {
+  string token_string = 1;
+  uint32 valid_until = 2;
+  string endpoints = 3;
+}
+
+message PingRequest {
+  string message = 1;
+}
+
+message PingResponse {
+  Error error = 1;
+  string message = 2;
+}
+
+message PushRequest {
+  string topic = 1;
+  string data = 2;
+}
+
+message PushResponse {
+  Error error = 1;
+}
+
+message RegisterRequest {
+  string machine_id = 1;
+  string hostname = 2;
+}
+
+message RegisterResponse {
+  Error error = 1;
+  Token token = 2;
+}
+
+message TokenRequest {
+  repeated string endpoints = 1;
+}
+
+message TokenResponse {
+  Error error = 1;
+  Token token = 2;
+}
