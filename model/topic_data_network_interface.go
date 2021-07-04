@@ -8,13 +8,17 @@ var (
 	_ TopicData = TopicDataNetworkInterface{}
 )
 
+type NetworkInterface struct {
+	Name     string           `json:"name"`
+	Type     string           `json:"type"`
+	Enabled  bool             `json:"enabled"`
+	MAC      net.HardwareAddr `json:"mac"`
+	IPs      []string         `json:"ips,omitempty"`
+	Children []string         `json:"children,omitempty"`
+}
+
 type TopicDataNetworkInterface struct {
-	Name     string
-	Type     string
-	Enabled  bool
-	MAC      net.HardwareAddr
-	IPs      []string
-	Children []string
+	NetworkInterface
 }
 
 func (td TopicDataNetworkInterface) Valid() bool {

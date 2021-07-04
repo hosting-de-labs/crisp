@@ -4,14 +4,16 @@ var (
 	_ TopicData = TopicDataInventory{}
 )
 
+type InventoryItem struct {
+	Type         string `json:"type"`
+	Manufacturer string `json:"manufacturer"`
+	Model        string `json:"model"`
+	PartNumber   string `json:"part_number,omitempty"`
+	SerialNumber string `json:"serial_number,omitempty"`
+}
+
 type TopicDataInventory struct {
-	Items []struct {
-		Type         string
-		Manufacturer string
-		Model        string
-		PartNumber   string
-		SerialNumber string
-	} `json:"items"`
+	Items []InventoryItem
 }
 
 func (td TopicDataInventory) Valid() bool {

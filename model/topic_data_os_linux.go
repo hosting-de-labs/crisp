@@ -6,13 +6,17 @@ var (
 	_ TopicData = TopicDataOsLinux{}
 )
 
-type TopicDataOsLinux struct {
+type OsLinux struct {
 	Arch              string `json:"arch,omitempty"`
 	OsName            string `json:"os_name,omitempty"`
 	OsVersionId       string `json:"os_version_id,omitempty"`
 	OsVersionCodename string `json:"os_version_codename,omitempty"`
 	Version           string `json:"version,omitempty"`
 	Virtualization    string `json:"virtualization,omitempty"`
+}
+
+type TopicDataOsLinux struct {
+	OsLinux
 }
 
 func (td TopicDataOsLinux) Valid() bool {
