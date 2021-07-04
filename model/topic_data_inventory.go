@@ -8,6 +8,7 @@ type InventoryItem struct {
 	Type         string `json:"type"`
 	Manufacturer string `json:"manufacturer"`
 	Model        string `json:"model"`
+	AssetTag     string `json:"asset_tag,omitempty"`
 	PartNumber   string `json:"part_number,omitempty"`
 	SerialNumber string `json:"serial_number,omitempty"`
 }

@@ -9,6 +9,8 @@ const (
 	TopicOsLinux          string = "os-linux"
 	TopicInventory        string = "inventory"
 	TopicNetworkInterface string = "network-interface"
+
+	TopicDataValueUnknown string = "unknown"
 )
 
 type TopicData interface {
