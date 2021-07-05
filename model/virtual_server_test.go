@@ -1,0 +1,164 @@
+package model_test
+
+import (
+	"strconv"
+	"testing"
+
+	"github.com/hosting-de-labs/go-netbox-client/types"
+	"github.com/stretchr/testify/assert"
+)
+
+func MockVirtualServer() types.VirtualServer {
+	vm := types.NewVirtualServer()
+	vm.Hypervisor = "hypervisor1"
+	vm.Resources.Cores = 4
+	vm.Resources.Disks = []types.VirtualServerDisk{{Size: 10}}
+
+	vm.Meta.OriginalEntity = vm.Copy()
+	return *vm
+}
+
+func TestVirtualServer_Copy(t *testing.T) {
+	vm1 := MockVirtualServer()
+	vm1.Hypervisor = "hypervisor1"
+	vm1.Resources.Cores = 4
+	vm1.Resources.Disks = []types.VirtualServerDisk{{Size: 10}}
+
+	vm2 := vm1.Copy()
+
+	assert.Equal(t, vm1, vm2)
+}
+
+func TestVirtualServer_IsEqual(t *testing.T) {
+	cases := []struct {
+		vm1     types.VirtualServer
+		vm2     types.VirtualServer
+		isEqual bool
+	}{
+		{
+			vm1: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Cores: 4,
+					Disks: []types.VirtualServerDisk{
+						{Size: 10},
+					},
+				},
+			},
+			vm2: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Cores: 4,
+					Disks: []types.VirtualServerDisk{
+						{Size: 10},
+					},
+				},
+			},
+			isEqual: true,
+		},
+		{
+			vm1: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Cores: 4,
+					Disks: []types.VirtualServerDisk{
+						{Size: 10},
+					},
+				},
+			},
+			vm2: types.VirtualServer{
+				Hypervisor: "hypervisor2",
+				Resources: types.VirtualServerResources{
+					Cores: 4,
+					Disks: []types.VirtualServerDisk{
+						{Size: 20},
+					},
+				},
+			},
+			isEqual: false,
+		},
+		{
+			vm1: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Cores: 4,
+					Disks: []types.VirtualServerDisk{
+						{Size: 10},
+					},
+				},
+			},
+			vm2: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Cores: 4,
+					Disks: []types.VirtualServerDisk{
+						{Size: 20},
+					},
+				},
+			},
+			isEqual: false,
+		},
+		{
+			vm1: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Cores: 4,
+					Disks: []types.VirtualServerDisk{
+						{Size: 10},
+					},
+				},
+			},
+			vm2: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Cores: 4,
+					Disks: []types.VirtualServerDisk{
+						{Size: 10},
+						{Size: 20},
+					},
+				},
+			},
+			isEqual: false,
+		},
+		{
+			vm1: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Cores: 4,
+				},
+			},
+			vm2: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Cores: 2,
+				},
+			},
+			isEqual: false,
+		},
+		{
+			vm1: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Memory: 1024,
+				},
+			},
+			vm2: types.VirtualServer{
+				Hypervisor: "hypervisor1",
+				Resources: types.VirtualServerResources{
+					Memory: 2048,
+				},
+			},
+			isEqual: false,
+		},
+	}
+
+	for key, testcase := range cases {
+		if testcase.isEqual {
+			assert.Equal(t, testcase.vm1, testcase.vm2, "Case ID: "+strconv.Itoa(key))
+			assert.True(t, testcase.vm1.IsEqual(testcase.vm2, true), "Case ID: "+strconv.Itoa(key))
+		} else {
+			assert.NotEqual(t, testcase.vm1, testcase.vm2, "Case ID: "+strconv.Itoa(key))
+			assert.False(t, testcase.vm1.IsEqual(testcase.vm2, true), "Case ID: "+strconv.Itoa(key))
+		}
+	}
+}

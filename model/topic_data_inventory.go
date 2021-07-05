@@ -4,15 +4,6 @@ var (
 	_ TopicData = TopicDataInventory{}
 )
 
-type InventoryItem struct {
-	Type         string `json:"type"`
-	Manufacturer string `json:"manufacturer"`
-	Model        string `json:"model"`
-	AssetTag     string `json:"asset_tag,omitempty"`
-	PartNumber   string `json:"part_number,omitempty"`
-	SerialNumber string `json:"serial_number,omitempty"`
-}
-
 type TopicDataInventory struct {
 	Items []InventoryItem
 }
@@ -23,7 +14,7 @@ func (td TopicDataInventory) Valid() bool {
 	}
 
 	for _, item := range td.Items {
-		if item.Type == "" ||
+		if item.Type == 0 ||
 			item.Manufacturer == "" ||
 			item.Model == "" {
 			return false
