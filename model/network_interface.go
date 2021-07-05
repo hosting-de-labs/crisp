@@ -91,9 +91,9 @@ type NetworkInterface struct {
 	IsManagement bool
 	MACAddress   net.HardwareAddr
 	Name         string
-	TaggedVlans  []VLAN
-	UntaggedVlan *VLAN
-	Children     []NetworkInterface
+	TaggedVlans  []int
+	UntaggedVlan int
+	Children     []string
 }
 
 func NewNetworkInterface() *NetworkInterface {
@@ -104,9 +104,9 @@ func NewNetworkInterface() *NetworkInterface {
 		IsManagement: false,
 		MACAddress:   net.HardwareAddr{},
 		Name:         "",
-		TaggedVlans:  []VLAN{},
-		UntaggedVlan: nil,
-		Children:     []NetworkInterface{},
+		TaggedVlans:  []int{},
+		UntaggedVlan: 0,
+		Children:     []string{},
 	}
 }
 
