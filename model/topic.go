@@ -14,6 +14,8 @@ const (
 )
 
 type TopicData interface {
+	Deserialize(string) error
+	Serialize() (string, error)
 	Valid() bool
 }
 

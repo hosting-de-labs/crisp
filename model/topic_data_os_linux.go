@@ -1,9 +1,12 @@
 package model
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 var (
-	_ TopicData = TopicDataOsLinux{}
+	_ TopicData = &TopicDataOsLinux{}
 )
 
 type OsLinux struct {
@@ -17,6 +20,19 @@ type OsLinux struct {
 
 type TopicDataOsLinux struct {
 	OsLinux
+}
+
+func (td *TopicDataOsLinux) Deserialize(d string) error {
+	return json.Unmarshal([]byte(d), td)
+}
+
+func (td *TopicDataOsLinux) Serialize() (string, error) {
+	data, err := json.Marshal(td)
+	if err != nil {
+		return "", err
+	}
+
+	return string(data), nil
 }
 
 func (td TopicDataOsLinux) Valid() bool {
