@@ -3,16 +3,15 @@ package model_test
 import (
 	"testing"
 
-	"github.com/hosting-de-labs/go-netbox-client/types"
-
+	"github.com/hosting-de-labs/go-crisp/model"
 	"github.com/stretchr/testify/assert"
 )
 
-func MockNetworkInterface() types.NetworkInterface {
-	netIf := types.NewNetworkInterface()
+func MockNetworkInterface() model.NetworkInterface {
+	netIf := model.NewNetworkInterface()
 	netIf.Name = "eth0"
 	netIf.MACAddress = []byte{0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff}
-	netIf.Type = types.InterfaceTypeEthernetFixed1000BaseT1G
+	netIf.Type = model.InterfaceTypeEthernetFixed1000BaseT1G
 
 	return *netIf
 }

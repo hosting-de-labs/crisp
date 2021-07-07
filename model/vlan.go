@@ -1,6 +1,6 @@
 package model
 
-import "github.com/hosting-de-labs/go-netbox-client/utils"
+import "github.com/hosting-de-labs/go-crisp/utils"
 
 type VLANStatus int
 

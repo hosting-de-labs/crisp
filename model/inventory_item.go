@@ -6,7 +6,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/hosting-de-labs/go-netbox-client/utils"
+	"github.com/hosting-de-labs/go-crisp/utils"
 )
 
 //InventoryItem represents a device / module that is attached to / built into a dedicated server

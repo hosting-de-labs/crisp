@@ -3,7 +3,7 @@ package model
 import (
 	"sort"
 
-	"github.com/hosting-de-labs/go-netbox-client/utils"
+	"github.com/hosting-de-labs/go-crisp/utils"
 )
 
 //Host represents a host

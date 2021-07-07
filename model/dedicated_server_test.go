@@ -4,17 +4,17 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/hosting-de-labs/go-netbox-client/types"
+	"github.com/hosting-de-labs/go-crisp/model"
 	"github.com/stretchr/testify/assert"
 )
 
-func mockDedicatedServer() types.DedicatedServer {
-	d := types.NewDedicatedServer()
+func mockDedicatedServer() model.DedicatedServer {
+	d := model.NewDedicatedServer()
 	d.Hostname = "host1"
 	d.IsManaged = false
-	d.Inventory = []*types.InventoryItem{
+	d.Inventory = []model.InventoryItem{
 		{
-			Type:         types.InventoryItemTypeProcessor,
+			Type:         model.InventoryItemTypeProcessor,
 			Manufacturer: "Intel",
 			Model:        "Xeon X5660",
 		},
@@ -26,26 +26,26 @@ func mockDedicatedServer() types.DedicatedServer {
 func TestDedicatedServer_Copy(t *testing.T) {
 	host1 := mockDedicatedServer()
 	host2 := host1.Copy()
-	assert.True(t, host1.IsEqual(host2, true))
+	assert.True(t, host1.IsEqual(host2))
 
-	host1.Inventory = append(host1.Inventory, &types.InventoryItem{
-		Type:         types.InventoryItemTypeMainboard,
+	host1.Inventory = append(host1.Inventory, model.InventoryItem{
+		Type:         model.InventoryItemTypeMainboard,
 		Manufacturer: "Supermicro",
 		Model:        "X9SCL-F",
 	})
-	assert.False(t, host1.IsEqual(host2, true))
+	assert.False(t, host1.IsEqual(host2))
 }
 
 //TODO: move to inventory_item.go
 func TestDedicatedServer_IsEqual(t *testing.T) {
 	cases := []struct {
-		host1   types.DedicatedServer
-		host2   types.DedicatedServer
+		host1   model.DedicatedServer
+		host2   model.DedicatedServer
 		isEqual bool
 	}{
 		{
-			host1: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host1: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{
 						Manufacturer: "unknown",
 						Model:        "unknown",
@@ -55,8 +55,8 @@ func TestDedicatedServer_IsEqual(t *testing.T) {
 					},
 				},
 			},
-			host2: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host2: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{
 						Manufacturer: "unknown",
 						Model:        "unknown",
@@ -69,79 +69,79 @@ func TestDedicatedServer_IsEqual(t *testing.T) {
 			isEqual: true,
 		},
 		{
-			host1: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host1: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{Manufacturer: "unknown"},
 				},
 			},
-			host2: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host2: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{Manufacturer: "u. n. owen"},
 				},
 			},
 			isEqual: false,
 		},
 		{
-			host1: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host1: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{Model: "unknown"},
 				},
 			},
-			host2: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host2: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{Model: "u. n. owen"},
 				},
 			},
 			isEqual: false,
 		},
 		{
-			host1: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host1: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{PartNumber: "unknown"},
 				},
 			},
-			host2: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host2: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{PartNumber: "u. n. owen"},
 				},
 			},
 			isEqual: false,
 		},
 		{
-			host1: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host1: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{AssetTag: "unknown"},
 				},
 			},
-			host2: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host2: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{AssetTag: "u. n. owen"},
 				},
 			},
 			isEqual: false,
 		},
 		{
-			host1: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host1: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{SerialNumber: "unknown"},
 				},
 			},
-			host2: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host2: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{SerialNumber: "u. n. owen"},
 				},
 			},
 			isEqual: false,
 		},
 		{
-			host1: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host1: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{Manufacturer: "Intel"},
 					{Manufacturer: "AMD"},
 				},
 			},
-			host2: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host2: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{Manufacturer: "AMD"},
 					{Manufacturer: "Intel"},
 				},
@@ -149,14 +149,14 @@ func TestDedicatedServer_IsEqual(t *testing.T) {
 			isEqual: true,
 		},
 		{
-			host1: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host1: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{Manufacturer: "Intel"},
 					{Manufacturer: "AMD"},
 				},
 			},
-			host2: types.DedicatedServer{
-				Inventory: []*types.InventoryItem{
+			host2: model.DedicatedServer{
+				Inventory: []model.InventoryItem{
 					{Manufacturer: "AMD"},
 				},
 			},
@@ -167,9 +167,9 @@ func TestDedicatedServer_IsEqual(t *testing.T) {
 
 	for key, testcase := range cases {
 		if testcase.isEqual {
-			assert.True(t, testcase.host1.IsEqual(testcase.host2, true), "Case ID: "+strconv.Itoa(key))
+			assert.True(t, testcase.host1.IsEqual(testcase.host2), "Case ID: "+strconv.Itoa(key))
 		} else {
-			assert.False(t, testcase.host1.IsEqual(testcase.host2, true), "Case ID: "+strconv.Itoa(key))
+			assert.False(t, testcase.host1.IsEqual(testcase.host2), "Case ID: "+strconv.Itoa(key))
 		}
 	}
 }

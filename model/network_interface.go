@@ -4,7 +4,7 @@ import (
 	"net"
 	"sort"
 
-	"github.com/hosting-de-labs/go-netbox-client/utils"
+	"github.com/hosting-de-labs/go-crisp/utils"
 )
 
 //InterfaceType represents the type of an interface
@@ -91,6 +91,7 @@ type NetworkInterface struct {
 	IsManagement bool
 	MACAddress   net.HardwareAddr
 	Name         string
+	MTU          int
 	TaggedVlans  []int
 	UntaggedVlan int
 	Children     []string
@@ -104,6 +105,7 @@ func NewNetworkInterface() *NetworkInterface {
 		IsManagement: false,
 		MACAddress:   net.HardwareAddr{},
 		Name:         "",
+		MTU:          1500,
 		TaggedVlans:  []int{},
 		UntaggedVlan: 0,
 		Children:     []string{},

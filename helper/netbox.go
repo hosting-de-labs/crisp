@@ -77,18 +77,16 @@ func (n Netbox) DeviceInterfaceConvert(nbIf models.Interface) (*model.NetworkInt
 			return nil, err
 		}
 
-		netIf.UntaggedVlan = vlan
+		netIf.UntaggedVlan = int(vlan.ID)
 	}
 
-	if len(nbIf.TaggedVlans) > 0 {
-		for _, taggedVlan := range nbIf.TaggedVlans {
-			vlan, err := VlanConvert(*taggedVlan)
-			if err != nil {
-				return nil, err
-			}
-
-			netIf.TaggedVlans = append(netIf.TaggedVlans, *vlan)
+	for _, taggedVlan := range nbIf.TaggedVlans {
+		vlan, err := VlanConvert(*taggedVlan)
+		if err != nil {
+			return nil, err
 		}
+
+		netIf.TaggedVlans = append(netIf.TaggedVlans, int(vlan.ID))
 	}
 
 	return netIf, nil
@@ -178,7 +176,7 @@ func VMInterfaceConvert(netboxInterface models.VMInterface) (*model.NetworkInter
 			return nil, err
 		}
 
-		netIf.UntaggedVlan = vlan
+		netIf.UntaggedVlan = int(vlan.ID)
 	}
 
 	if len(netboxInterface.TaggedVlans) > 0 {
@@ -188,7 +186,7 @@ func VMInterfaceConvert(netboxInterface models.VMInterface) (*model.NetworkInter
 				return nil, err
 			}
 
-			netIf.TaggedVlans = append(netIf.TaggedVlans, *vlan)
+			netIf.TaggedVlans = append(netIf.TaggedVlans, int(vlan.ID))
 		}
 	}
 

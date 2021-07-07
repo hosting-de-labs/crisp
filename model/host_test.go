@@ -1,31 +1,17 @@
 package model_test
 
 import (
-	"net"
 	"strconv"
 	"testing"
 
-	"github.com/hosting-de-labs/go-netbox-client/types"
-
+	"github.com/hosting-de-labs/go-crisp/model"
 	"github.com/stretchr/testify/assert"
 )
 
-func MockHost() types.Host {
-	h := types.NewHost()
+func MockHost() model.Host {
+	h := model.NewHost()
 	h.Hostname = "host1"
-
-	h.PrimaryIPv4 = &types.IPAddress{
-		Address: "192.168.1.1",
-		CIDR:    24,
-		Family:  types.IPAddressFamilyIPv4,
-	}
-	h.PrimaryIPv6 = &types.IPAddress{
-		Address: "::1",
-		CIDR:    64,
-		Family:  types.IPAddressFamilyIPv6,
-	}
-
-	h.Meta.OriginalEntity = h.Copy()
+	h.Platform = "Debian "
 
 	return *h
 }
@@ -63,62 +49,29 @@ func TestHost_Copy(t *testing.T) {
 	assert.NotEqual(t, host1, host2)
 
 	host3 := MockHost()
-
-	mac, err := net.ParseMAC("aa:bb:cc:dd:ee:ff")
-	assert.Nil(t, err)
-
-	host3.NetworkInterfaces = append(host3.NetworkInterfaces, types.NetworkInterface{
-		Name:       "vlan.1",
-		MACAddress: mac,
-		IPAddresses: []types.IPAddress{
-			{
-				Address: "192.168.10.1",
-				CIDR:    24,
-				Family:  types.IPAddressFamilyIPv4,
-			},
-		},
-	})
-
+	host3.AddTag("tag1")
 	host4 := host3.Copy()
 	assert.Equal(t, host3, host4)
 
-	host4.NetworkInterfaces[0].Name = "vlan.2"
+	host3.AddTag("tag2")
 	assert.NotEqual(t, host3, host4)
-
-	host5 := MockHost()
-	host5.AddTag("tag1")
-	host6 := host5.Copy()
-	assert.Equal(t, host5, host6)
-
-	host5.AddTag("tag2")
-	assert.NotEqual(t, host5, host6)
 }
 
 func TestHost_IsEqual(t *testing.T) {
 	cases := []struct {
-		host1   types.Host
-		host2   types.Host
+		host1   model.Host
+		host2   model.Host
 		isEqual bool
 	}{
 		{
-			host1:   types.Host{},
-			host2:   types.Host{},
+			host1:   model.Host{},
+			host2:   model.Host{},
 			isEqual: true,
 		},
 		{
-			host1: types.Host{
+			host1: model.Host{
 				Hostname:  "Server",
 				IsManaged: true,
-				PrimaryIPv4: &types.IPAddress{
-					Address: "10.10.10.1",
-					CIDR:    24,
-					Family:  types.IPAddressFamilyIPv4,
-				},
-				PrimaryIPv6: &types.IPAddress{
-					Address: "::1",
-					CIDR:    128,
-					Family:  types.IPAddressFamilyIPv6,
-				},
 				Comments: []string{
 					"Comment1",
 					"Comment2",
@@ -128,19 +81,9 @@ func TestHost_IsEqual(t *testing.T) {
 					"Tag2",
 				},
 			},
-			host2: types.Host{
+			host2: model.Host{
 				Hostname:  "Server",
 				IsManaged: true,
-				PrimaryIPv4: &types.IPAddress{
-					Address: "10.10.10.1",
-					CIDR:    24,
-					Family:  types.IPAddressFamilyIPv4,
-				},
-				PrimaryIPv6: &types.IPAddress{
-					Address: "::1",
-					CIDR:    128,
-					Family:  types.IPAddressFamilyIPv6,
-				},
 				Comments: []string{
 					"Comment1",
 					"Comment2",
@@ -153,110 +96,47 @@ func TestHost_IsEqual(t *testing.T) {
 			isEqual: true,
 		},
 		{
-			host1: types.Host{
+			host1: model.Host{
 				Hostname: "Server1",
 			},
-			host2: types.Host{
+			host2: model.Host{
 				Hostname: "Server2",
 			},
 			isEqual: false,
 		},
 		{
-			host1: types.Host{
+			host1: model.Host{
 				IsManaged: true,
 			},
-			host2: types.Host{
+			host2: model.Host{
 				IsManaged: false,
 			},
 			isEqual: false,
 		},
 		{
-			host1: types.Host{
-				PrimaryIPv4: &types.IPAddress{
-					Address: "10.10.10.1",
-					CIDR:    24,
-					Family:  types.IPAddressFamilyIPv4,
-				},
-			},
-			host2: types.Host{
-				PrimaryIPv4: &types.IPAddress{
-					Address: "10.10.10.2",
-					CIDR:    24,
-					Family:  types.IPAddressFamilyIPv4,
-				},
-			},
-			isEqual: false,
-		},
-		{
-			host1: types.Host{
-				PrimaryIPv6: &types.IPAddress{
-					Address: "::1",
-					CIDR:    128,
-					Family:  types.IPAddressFamilyIPv6,
-				},
-			},
-			host2: types.Host{
-				PrimaryIPv6: &types.IPAddress{
-					Address: "::2",
-					CIDR:    128,
-					Family:  types.IPAddressFamilyIPv6,
-				},
-			},
-			isEqual: false,
-		},
-		{
-			host1: types.Host{
+			host1: model.Host{
 				Tags: []string{"Tag1"},
 			},
-			host2: types.Host{
+			host2: model.Host{
 				Tags: []string{"Tag2"},
 			},
 			isEqual: false,
 		},
 		{
-			host1: types.Host{
+			host1: model.Host{
 				Tags: []string{"Tag1", "Tag2"},
 			},
-			host2: types.Host{
+			host2: model.Host{
 				Tags: []string{"Tag1"},
 			},
 			isEqual: false,
 		},
 		{
-			host1: types.Host{
+			host1: model.Host{
 				Comments: []string{"Comment1"},
 			},
-			host2: types.Host{
+			host2: model.Host{
 				Comments: []string{"Comment2"},
-			},
-			isEqual: false,
-		},
-		{
-			host1: types.Host{
-				NetworkInterfaces: []types.NetworkInterface{
-					{Name: "eth0"},
-					{Name: "eth1"},
-				},
-			},
-			host2: types.Host{
-				NetworkInterfaces: []types.NetworkInterface{
-					{Name: "eth1"},
-					{Name: "eth0"},
-				},
-			},
-			isEqual: true,
-		},
-		{
-			host1: types.Host{
-				NetworkInterfaces: []types.NetworkInterface{
-					{Name: "eth0"},
-					{Name: "eth1"},
-				},
-			},
-			host2: types.Host{
-				NetworkInterfaces: []types.NetworkInterface{
-					{Name: "eth0"},
-				},
 			},
 			isEqual: false,
 		},
@@ -264,9 +144,9 @@ func TestHost_IsEqual(t *testing.T) {
 
 	for key, testcase := range cases {
 		if testcase.isEqual {
-			assert.True(t, testcase.host1.IsEqual(testcase.host2, true), "Case ID: "+strconv.Itoa(key))
+			assert.True(t, testcase.host1.IsEqual(testcase.host2), "Case ID: "+strconv.Itoa(key))
 		} else {
-			assert.False(t, testcase.host1.IsEqual(testcase.host2, true), "Case ID: "+strconv.Itoa(key))
+			assert.False(t, testcase.host1.IsEqual(testcase.host2), "Case ID: "+strconv.Itoa(key))
 		}
 	}
 }

@@ -3,28 +3,27 @@ package model_test
 import (
 	"testing"
 
-	"github.com/hosting-de-labs/go-netbox-client/types"
-
+	"github.com/hosting-de-labs/go-crisp/model"
 	"github.com/stretchr/testify/assert"
 )
 
-func MockIpv4Address() (out types.IPAddress) {
-	return types.IPAddress{
-		Family:      types.IPAddressFamilyIPv4,
+func MockIpv4Address() (out model.IPAddress) {
+	return model.IPAddress{
+		Family:      model.IPAddressFamilyIPv4,
 		Address:     "192.168.10.1",
 		CIDR:        24,
-		Status:      types.IPAddressStatusActive,
+		Status:      model.IPAddressStatusActive,
 		Description: "An internal ip address",
 		Tags:        []string{"internal", "netbox-sync"},
 	}
 }
 
-func MockIpv6Address() (out types.IPAddress) {
-	return types.IPAddress{
-		Family:      types.IPAddressFamilyIPv6,
+func MockIpv6Address() (out model.IPAddress) {
+	return model.IPAddress{
+		Family:      model.IPAddressFamilyIPv6,
 		Address:     "fc00::1",
 		CIDR:        128,
-		Status:      types.IPAddressStatusActive,
+		Status:      model.IPAddressStatusActive,
 		Description: "An internal ip address",
 		Tags:        []string{"internal", "netbox-sync"},
 	}

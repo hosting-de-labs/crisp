@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/hosting-de-labs/go-netbox-client/utils"
+	"github.com/hosting-de-labs/go-crisp/utils"
 )
 
 //IPAddressFamily represents a type an ip-address can have
