@@ -16,24 +16,31 @@ const (
 
 type Client struct {
 	Crisp
+
+	token string
 }
 
-func NewCrispClient(baseURL string, token string) *Client {
-	c := NewCrispProtobufClient(
+func NewCrispClient(baseURL string) *Client {
+	cl := &Client{}
+
+	cl.Crisp = NewCrispProtobufClient(
 		baseURL,
 		&http.Client{},
-		twirp.WithClientHooks(hooks(token)),
+		twirp.WithClientHooks(hooks(func() string { return cl.token })),
 	)
-
-	return &Client{c}
+	return cl
 }
 
-func hooks(token string) *twirp.ClientHooks {
+func (c *Client) SetToken(token string) {
+	c.token = token
+}
+
+func hooks(tknFnc func() string) *twirp.ClientHooks {
 	return &twirp.ClientHooks{
 		RequestPrepared: func(ctx context.Context, request *http.Request) (context.Context, error) {
 			rqMethod := path.Base(request.RequestURI)
 			if rqMethod != "Register" {
-				return withAuthContext(ctx, DefaultAuthHeader, token)
+				return withAuthContext(ctx, DefaultAuthHeader, tknFnc)
 			}
 
 			return ctx, nil
@@ -43,9 +50,9 @@ func hooks(token string) *twirp.ClientHooks {
 	}
 }
 
-func withAuthContext(ctx context.Context, headerName string, token string) (context.Context, error) {
+func withAuthContext(ctx context.Context, headerName string, tknFnc func() string) (context.Context, error) {
 	header := make(http.Header)
-	header.Set(headerName, token)
+	header.Set(headerName, tknFnc())
 
 	ctx, err := twirp.WithHTTPRequestHeaders(ctx, header)
 	if err != nil {
