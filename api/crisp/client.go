@@ -16,9 +16,9 @@ type Client struct {
 	Crisp
 }
 
-func NewCrispClient(url string, token string) *Client {
+func NewCrispClient(baseURL string, token string) *Client {
 	c := NewCrispProtobufClient(
-		url,
+		baseURL,
 		&http.Client{},
 		twirp.WithClientInterceptors(authInterceptor(DefaultAuthHeader, token)),
 	)
