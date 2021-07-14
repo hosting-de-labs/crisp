@@ -19,7 +19,7 @@ message Error {
 message Token {
   string token_string = 1;
   uint32 valid_until = 2;
-  string endpoints = 3;
+  repeated string endpoints = 3;
 }
 
 message PingRequest {
