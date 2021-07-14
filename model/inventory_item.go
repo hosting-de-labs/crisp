@@ -11,14 +11,14 @@ import (
 
 //InventoryItem represents a device / module that is attached to / built into a dedicated server
 type InventoryItem struct {
-	Type         InventoryItemType
-	Manufacturer string
-	Model        string
-	PartNumber   string
-	SerialNumber string
-	AssetTag     string
-	Details      map[string]string
-	Tags         []string
+	Type         InventoryItemType `json:"type,omitempty"`
+	Manufacturer string            `json:"manufacturer,omitempty"`
+	Model        string            `json:"model,omitempty"`
+	PartNumber   string            `json:"part_number,omitempty"`
+	SerialNumber string            `json:"serial_number,omitempty"`
+	AssetTag     string            `json:"asset_tag,omitempty"`
+	Details      map[string]string `json:"details,omitempty"`
+	Tags         []string          `json:"tags,omitempty"`
 }
 
 func NewInventoryItem() *InventoryItem {

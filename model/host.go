@@ -8,12 +8,12 @@ import (
 
 //Host represents a host
 type Host struct {
-	Platform string
+	Platform string `json:"platform,omitempty"`
 
-	Hostname  string
-	IsManaged bool
-	Tags      []string
-	Comments  []string
+	Hostname  string   `json:"hostname,omitempty"`
+	IsManaged bool     `json:"is_managed,omitempty"`
+	Tags      []string `json:"tags,omitempty"`
+	Comments  []string `json:"comments,omitempty"`
 }
 
 //NewHost returns a new instance of an Host with Metadata initialized

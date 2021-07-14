@@ -6,10 +6,10 @@ import "sort"
 type DedicatedServer struct {
 	Host
 
-	AssetTag     string
-	SerialNumber string
+	AssetTag     string `json:"asset_tag,omitempty"`
+	SerialNumber string `json:"serial_number,omitempty"`
 
-	Inventory []InventoryItem
+	Inventory []InventoryItem `json:"inventory,omitempty"`
 }
 
 func NewDedicatedServer() *DedicatedServer {

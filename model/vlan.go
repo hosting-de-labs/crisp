@@ -12,11 +12,11 @@ const (
 )
 
 type VLAN struct {
-	ID          uint16
-	Name        string
-	Status      VLANStatus
-	Description string
-	Tags        []string
+	ID          uint16     `json:"id,omitempty"`
+	Name        string     `json:"name,omitempty"`
+	Status      VLANStatus `json:"status,omitempty"`
+	Description string     `json:"description,omitempty"`
+	Tags        []string   `json:"tags,omitempty"`
 }
 
 func (v VLAN) Clone() (out VLAN) {

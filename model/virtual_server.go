@@ -4,7 +4,7 @@ package model
 type VirtualServer struct {
 	Host
 
-	Resources VirtualServerResources
+	Resources VirtualServerResources `json:"resources"`
 }
 
 //NewVirtualServer returns a new instance of VirtualServer

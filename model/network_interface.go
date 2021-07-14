@@ -85,16 +85,16 @@ const (
 
 //NetworkInterface represents a network interface assigned to a host
 type NetworkInterface struct {
-	Type         InterfaceType
-	Enabled      bool
-	IPAddresses  []IPAddress
-	IsManagement bool
-	MACAddress   net.HardwareAddr
-	Name         string
-	MTU          int
-	TaggedVlans  []int
-	UntaggedVlan int
-	Children     []string
+	Type         InterfaceType    `json:"type,omitempty"`
+	Enabled      bool             `json:"enabled,omitempty"`
+	IPAddresses  []IPAddress      `json:"ip_addresses,omitempty"`
+	IsManagement bool             `json:"is_management,omitempty"`
+	MACAddress   net.HardwareAddr `json:"mac_address,omitempty"`
+	Name         string           `json:"name,omitempty"`
+	MTU          int              `json:"mtu,omitempty"`
+	TaggedVlans  []int            `json:"tagged_vlans,omitempty"`
+	UntaggedVlan int              `json:"untagged_vlan,omitempty"`
+	Children     []string         `json:"children,omitempty"`
 }
 
 func NewNetworkInterface() *NetworkInterface {

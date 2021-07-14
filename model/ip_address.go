@@ -44,14 +44,14 @@ const (
 //IPAddress represents an ip address
 type IPAddress struct {
 	//TODO: inherit from net.IPNet, get rid of "Type"
-	Family  IPAddressFamily
-	Address string
-	CIDR    uint16
+	Family  IPAddressFamily `json:"family,omitempty"`
+	Address string          `json:"address,omitempty"`
+	CIDR    uint16          `json:"cidr,omitempty"`
 
-	Status      IPAddressStatus
-	Role        *IPAddressRole
-	Tags        []string
-	Description string
+	Status      IPAddressStatus `json:"status,omitempty"`
+	Role        *IPAddressRole  `json:"role,omitempty"`
+	Tags        []string        `json:"tags,omitempty"`
+	Description string          `json:"description,omitempty"`
 }
 
 func (ip IPAddress) String() string {
