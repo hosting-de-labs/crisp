@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"path"
 
 	"github.com/twitchtv/twirp"
 )
@@ -26,7 +25,12 @@ func NewCrispClient(baseURL string) *Client {
 	cl.Crisp = NewCrispProtobufClient(
 		baseURL,
 		&http.Client{},
-		twirp.WithClientHooks(hooks(func() string { return cl.token })),
+		twirp.WithClientInterceptors(
+			authInterceptor(
+				DefaultAuthHeader,
+				func() string { return cl.token },
+			),
+		),
 	)
 	return cl
 }
@@ -35,18 +39,19 @@ func (c *Client) SetToken(token string) {
 	c.token = token
 }
 
-func hooks(tknFnc func() string) *twirp.ClientHooks {
-	return &twirp.ClientHooks{
-		RequestPrepared: func(ctx context.Context, request *http.Request) (context.Context, error) {
-			rqMethod := path.Base(request.RequestURI)
-			if rqMethod != "Register" {
-				return withAuthContext(ctx, DefaultAuthHeader, tknFnc)
+func authInterceptor(header string, tknFnc func() string) twirp.Interceptor {
+	return func(next twirp.Method) twirp.Method {
+		return func(ctx context.Context, req interface{}) (interface{}, error) {
+			if m, ok := twirp.MethodName(ctx); ok && m != "Register" {
+				var err error
+				ctx, err = withAuthContext(ctx, header, tknFnc)
+				if err != nil {
+					return nil, err
+				}
 			}
 
-			return ctx, nil
-		},
-		ResponseReceived: nil,
-		Error:            nil,
+			return next(ctx, req)
+		}
 	}
 }
 
@@ -54,10 +59,10 @@ func withAuthContext(ctx context.Context, headerName string, tknFnc func() strin
 	header := make(http.Header)
 	header.Set(headerName, tknFnc())
 
-	ctx, err := twirp.WithHTTPRequestHeaders(ctx, header)
+	newCtx, err := twirp.WithHTTPRequestHeaders(ctx, header)
 	if err != nil {
 		return nil, fmt.Errorf("twirp error setting headers: %s", err)
 	}
 
-	return ctx, nil
+	return newCtx, nil
 }
