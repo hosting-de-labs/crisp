@@ -109,16 +109,6 @@ func mockNetboxDevice() models.DeviceWithConfigContext {
 	}
 }
 
-func mockNetboxDeviceInterface() models.Interface {
-	return models.Interface{
-		Enabled:  true,
-		ID:       1,
-		Label:    "eth0",
-		MgmtOnly: false,
-		Name:     swag.String("eth0"),
-	}
-}
-
 func mockNetboxVlan() models.VLAN {
 	return models.VLAN{
 		ID:   10,
