@@ -15,10 +15,8 @@ type Netbox struct{}
 func DeviceConvert(device interface{}) (out *model.DedicatedServer, err error) {
 	out = model.NewDedicatedServer()
 
-	switch device.(type) {
+	switch d := device.(type) {
 	case models.Device:
-		d := device.(models.Device)
-
 		if d.Name != nil {
 			out.Hostname = *d.Name
 		}
@@ -30,8 +28,6 @@ func DeviceConvert(device interface{}) (out *model.DedicatedServer, err error) {
 		out.SerialNumber = d.Serial
 		out.Comments = strings.Split(d.Comments, "\n") //TODO: use utils.ParseVMComment
 	case models.DeviceWithConfigContext:
-		d := device.(models.DeviceWithConfigContext)
-
 		if d.Name != nil {
 			out.Hostname = *d.Name
 		}
@@ -196,10 +192,8 @@ func VMInterfaceConvert(netboxInterface models.VMInterface) (*model.NetworkInter
 func VMConvert(netboxVM interface{}) (out *model.VirtualServer, err error) {
 	out = model.NewVirtualServer()
 
-	switch netboxVM.(type) {
+	switch vm := netboxVM.(type) {
 	case models.VirtualMachineWithConfigContext:
-		vm := netboxVM.(models.VirtualMachineWithConfigContext)
-
 		out.Hostname = *vm.Name
 
 		if vm.Vcpus != nil {
