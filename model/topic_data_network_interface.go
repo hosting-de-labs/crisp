@@ -7,7 +7,7 @@ var (
 )
 
 type TopicDataNetworkInterface struct {
-	NetworkInterface
+	Interfaces []NetworkInterface `json:"interfaces,omitempty"`
 }
 
 func (td *TopicDataNetworkInterface) Deserialize(d string) error {
@@ -24,7 +24,17 @@ func (td *TopicDataNetworkInterface) Serialize() (string, error) {
 }
 
 func (td TopicDataNetworkInterface) Valid() bool {
-	return td.Name != "" &&
-		td.Type != "" &&
-		td.MACAddress.String() != ""
+	if len(td.Interfaces) == 0 {
+		return false
+	}
+
+	for _, intf := range td.Interfaces {
+		if intf.Name == "" ||
+			intf.Type == "" ||
+			intf.MACAddress.String() == "" {
+			return false
+		}
+	}
+
+	return true
 }
