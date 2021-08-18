@@ -41,11 +41,6 @@ func (i InventoryItemType) String() string {
 	}
 }
 
-//MarshalJSON implements the Marshaller interface
-func (i InventoryItemType) MarshalJSON() ([]byte, error) {
-	return []byte("\"" + i.String() + "\""), nil
-}
-
 //Short returns a short identifier for a given InventoryItemType
 func (i InventoryItemType) Short() string {
 	switch i {
