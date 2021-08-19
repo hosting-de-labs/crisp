@@ -7,6 +7,7 @@ type PackageState int
 const (
 	PackageStateUnknown PackageState = iota
 	PackageStateInstalled
+	PackageStateInstallUnfinished
 	PackageStateRemoved
 )
 
@@ -20,6 +21,8 @@ func (p PackageState) String() string {
 		return "installed"
 	case PackageStateRemoved:
 		return "removed"
+	case PackageStateInstallUnfinished:
+		return "unfinished"
 	default:
 		return "unknown"
 	}
