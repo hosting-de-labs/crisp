@@ -1,5 +1,7 @@
 package model
 
+import "fmt"
+
 type InventoryItemType int
 
 const (
@@ -13,6 +15,10 @@ const (
 	InventoryItemTypeMemoryModule
 	InventoryItemTypeBasebandManagementController
 	InventoryItemTypePowersupply
+)
+
+var (
+	_ fmt.Stringer = InventoryItemType(0)
 )
 
 //String implements the Stringer interface

@@ -21,6 +21,10 @@ type InventoryItem struct {
 	Tags         []string          `json:"tags,omitempty"`
 }
 
+var (
+	_ fmt.Stringer = &InventoryItem{}
+)
+
 func NewInventoryItem() *InventoryItem {
 	return &InventoryItem{
 		Details: make(map[string]string),
