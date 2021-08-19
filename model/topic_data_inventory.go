@@ -1,7 +1,5 @@
 package model
 
-import "encoding/json"
-
 var (
 	_ TopicData = &TopicDataInventory{}
 )
@@ -11,16 +9,11 @@ type TopicDataInventory struct {
 }
 
 func (td *TopicDataInventory) Deserialize(d string) error {
-	return json.Unmarshal([]byte(d), td)
+	return deserialize(d, td)
 }
 
 func (td *TopicDataInventory) Serialize() (string, error) {
-	data, err := json.Marshal(td)
-	if err != nil {
-		return "", err
-	}
-
-	return string(data), nil
+	return serialize(td)
 }
 
 func (td *TopicDataInventory) Valid() bool {

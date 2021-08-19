@@ -1,7 +1,5 @@
 package model
 
-import "encoding/json"
-
 var (
 	_ TopicData = &TopicDataNetworkInterface{}
 )
@@ -11,16 +9,11 @@ type TopicDataNetworkInterface struct {
 }
 
 func (td *TopicDataNetworkInterface) Deserialize(d string) error {
-	return json.Unmarshal([]byte(d), td)
+	return deserialize(d, td)
 }
 
 func (td *TopicDataNetworkInterface) Serialize() (string, error) {
-	data, err := json.Marshal(td)
-	if err != nil {
-		return "", err
-	}
-
-	return string(data), nil
+	return serialize(td)
 }
 
 func (td TopicDataNetworkInterface) Valid() bool {

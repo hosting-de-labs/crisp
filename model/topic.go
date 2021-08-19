@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/json"
 	"time"
 )
 
@@ -27,4 +28,17 @@ type Topic struct {
 
 type TopicMetadata struct {
 	AddedOn time.Time `json:"added_on"`
+}
+
+func deserialize(d string, td interface{}) error {
+	return json.Unmarshal([]byte(d), td)
+}
+
+func serialize(td interface{}) (string, error) {
+	data, err := json.Marshal(td)
+	if err != nil {
+		return "", err
+	}
+
+	return string(data), nil
 }
