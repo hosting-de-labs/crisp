@@ -11,6 +11,21 @@ const (
 )
 
 var (
+	_ fmt.Stringer = PackageState(0)
+)
+
+func (p PackageState) String() string {
+	switch p {
+	case PackageStateInstalled:
+		return "installed"
+	case PackageStateRemoved:
+		return "removed"
+	default:
+		return "unknown"
+	}
+}
+
+var (
 	_ fmt.Stringer = &Package{}
 )
 
