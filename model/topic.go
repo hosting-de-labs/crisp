@@ -10,6 +10,7 @@ const (
 	TopicOsLinux          string = "os-linux"
 	TopicInventory        string = "inventory"
 	TopicNetworkInterface string = "network-interface"
+	TopicPackage          string = "package"
 
 	TopicDataValueUnknown string = "unknown"
 )
