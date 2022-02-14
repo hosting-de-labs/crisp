@@ -11,7 +11,7 @@ const (
 	TopicInventory        string = "inventory"
 	TopicNetworkInterface string = "network-interface"
 	TopicPackage          string = "package"
-	TopicVirtualServier   string = "virtual-server"
+	TopicVirtualServer    string = "virtual-server"
 
 	TopicDataValueUnknown string = "unknown"
 )
