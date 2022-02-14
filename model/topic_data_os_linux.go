@@ -17,18 +17,22 @@ type OsLinux struct {
 	Virtualization    string `json:"virtualization,omitempty"`
 }
 
+// TopicDataOsLinux is a container for OsLinux data being transmitted as topic data.
 type TopicDataOsLinux struct {
 	OsLinux
 }
 
+// Deserialize calls internal helper to read data from json string.
 func (td *TopicDataOsLinux) Deserialize(d string) error {
 	return deserialize(d, td)
 }
 
+// Serialize returns a json string or reports an error.
 func (td *TopicDataOsLinux) Serialize() (string, error) {
 	return serialize(td)
 }
 
+// Valid verifies required os linux data is set.
 func (td TopicDataOsLinux) Valid() bool {
 	return td.Arch != "" &&
 		td.OsName != "" &&
