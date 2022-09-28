@@ -32,8 +32,9 @@ message PingResponse {
 }
 
 message PushRequest {
-  string topic = 1;
-  string data = 2;
+  string machine_id = 1;
+  string topic = 2;
+  string data = 3;
 }
 
 message PushResponse {
